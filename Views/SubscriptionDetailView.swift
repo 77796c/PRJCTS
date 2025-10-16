@@ -5,6 +5,7 @@ struct SubscriptionDetailView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
     @Environment(\.openURL) private var openURL
+    @EnvironmentObject private var notificationManager: NotificationManager
     @Bindable var subscription: Subscription
 
     @State private var showingDeleteConfirmation = false
@@ -31,9 +32,10 @@ struct SubscriptionDetailView: View {
         .sheet(isPresented: $presentingEditSheet) {
             NavigationStack {
                 SubscriptionFormView(subscription: subscription)
+                    .environmentObject(notificationManager)
             }
         }
-        .alert("Delete Subscription?", isPresented: $showingDeleteConfirmation) {
+
             Button("Delete", role: .destructive, action: deleteSubscription)
             Button("Cancel", role: .cancel, action: {})
         } message: {
@@ -144,9 +146,22 @@ struct SubscriptionDetailView: View {
             subscription.updatedAt = Date()
             saveChanges()
         }
+
+        Task {
+            if subscription.isArchived {
+                await notificationManager.cancelReminder(for: subscription)
+            } else {
+                await notificationManager.scheduleReminder(for: subscription)
+            }
+        }
     }
 
     private func deleteSubscription() {
+        let identifier = subscription.id
+        Task {
+            await notificationManager.cancelReminder(forID: identifier)
+        }
+
         withAnimation {
             modelContext.delete(subscription)
             saveChanges()
@@ -167,6 +182,7 @@ struct SubscriptionDetailView: View {
     NavigationStack {
         if let subscription = try? PreviewData.container.mainContext.fetch(FetchDescriptor<Subscription>()).first {
             SubscriptionDetailView(subscription: subscription)
+                .environmentObject(NotificationManager())
         }
     }
     .modelContainer(PreviewData.container)

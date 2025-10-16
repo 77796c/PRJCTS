@@ -3,6 +3,8 @@ import SwiftData
 
 @main
 struct SubscriptionTrackerApp: App {
+    @StateObject private var notificationManager = NotificationManager()
+
     var sharedModelContainer: ModelContainer = {
         let schema = Schema([
             Subscription.self,
@@ -19,6 +21,7 @@ struct SubscriptionTrackerApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .environmentObject(notificationManager)
         }
         .modelContainer(sharedModelContainer)
     }

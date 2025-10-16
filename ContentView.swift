@@ -28,4 +28,5 @@ struct ContentView: View {
 #Preview {
     ContentView()
         .modelContainer(PreviewData.container)
+        .environmentObject(NotificationManager())
 }

@@ -3,6 +3,7 @@ import SwiftData
 
 @Model
 final class Subscription {
+    var id: UUID
     var name: String
     var price: Decimal
     var currency: String
@@ -19,6 +20,7 @@ final class Subscription {
     var remindersEnabled: Bool
     
     init(
+        id: UUID = UUID(),
         name: String,
         price: Decimal,
         currency: String = "USD",
@@ -34,6 +36,7 @@ final class Subscription {
         reminderLeadTime: Int = 3,
         remindersEnabled: Bool = true
     ) {
+        self.id = id
         self.name = name
         self.price = price
         self.currency = currency

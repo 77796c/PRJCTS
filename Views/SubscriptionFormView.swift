@@ -4,7 +4,9 @@ import SwiftData
 struct SubscriptionFormView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
+    @EnvironmentObject private var notificationManager: NotificationManager
     @AppStorage(AppStorageKey.globalRemindersEnabled) private var globalRemindersEnabled = true
+    @AppStorage(AppStorageKey.defaultReminderLeadTime) private var defaultReminderLeadTime = 3
 
     private let subscription: Subscription?
 
@@ -113,11 +115,21 @@ struct SubscriptionFormView: View {
         .onAppear {
             if subscription == nil {
                 remindersEnabled = globalRemindersEnabled
+                reminderLeadTime = defaultReminderLeadTime
             }
         }
         .onChange(of: billingPeriod) { newValue in
             if newValue != .custom {
                 customBillingDaysString = ""
+            }
+        }
+        .onChange(of: remindersEnabled) { isEnabled in
+            guard isEnabled else { return }
+            Task {
+                let granted = await notificationManager.ensureAuthorization()
+                if !granted {
+                    remindersEnabled = false
+                }
             }
         }
     }
@@ -163,6 +175,8 @@ struct SubscriptionFormView: View {
 
         errorMessage = nil
 
+        let targetSubscription: Subscription
+
         if let subscription {
             subscription.name = name.trimmingCharacters(in: .whitespacesAndNewlines)
             subscription.price = price
@@ -176,6 +190,7 @@ struct SubscriptionFormView: View {
             subscription.reminderLeadTime = reminderLeadTime
             subscription.remindersEnabled = remindersEnabled
             subscription.updatedAt = Date()
+            targetSubscription = subscription
         } else {
             let newSubscription = Subscription(
                 name: name.trimmingCharacters(in: .whitespacesAndNewlines),
@@ -191,10 +206,20 @@ struct SubscriptionFormView: View {
                 remindersEnabled: remindersEnabled
             )
             modelContext.insert(newSubscription)
+            targetSubscription = newSubscription
         }
 
         do {
             try modelContext.save()
+
+            Task {
+                if targetSubscription.remindersEnabled {
+                    await notificationManager.scheduleReminder(for: targetSubscription)
+                } else {
+                    await notificationManager.cancelReminder(forID: targetSubscription.id)
+                }
+            }
+
             dismiss()
         } catch {
             errorMessage = error.localizedDescription
@@ -227,6 +252,7 @@ private extension SubscriptionFormView {
 #Preview {
     NavigationStack {
         SubscriptionFormView()
+            .environmentObject(NotificationManager())
     }
     .modelContainer(PreviewData.container)
 }

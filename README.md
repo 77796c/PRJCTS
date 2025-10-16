@@ -8,7 +8,7 @@ A SwiftData-based subscription tracking application for iOS and macOS.
 - **Subscription Management**: Track recurring subscriptions with various billing periods
 - **Cost Normalization**: Automatically calculate monthly costs across different billing cycles
 - **Renewal Tracking**: Calculate upcoming renewal dates and days until next charge
-- **Reminder System**: Configurable reminders for upcoming subscription renewals
+- **Reminder System**: Configurable per-subscription reminders with adjustable lead times and global defaults
 - **Archive Support**: Archive old or cancelled subscriptions
 
 ## Models
@@ -105,6 +105,14 @@ Run tests with:
 ```bash
 swift test
 ```
+
+### Notification Testing in Simulator
+
+1. Launch the app in the iOS Simulator and open the **Settings** tab.
+2. Enable **Enable renewal reminders** and, if prompted, grant notification access.
+3. Adjust the default lead time if desired, then add or edit a subscription with reminders enabled.
+4. Return to **Settings ▸ Pending Reminders (Debug)** and tap **Refresh Pending Reminders** to verify the scheduled notification.
+5. Use **Features ▸ Trigger Notification** from the simulator menu or advance the simulator time to confirm the reminder fires on schedule.
 
 ## Requirements
 

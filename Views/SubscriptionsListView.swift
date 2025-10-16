@@ -4,6 +4,7 @@ import SwiftData
 struct SubscriptionsListView: View {
     @Binding var selectedTab: AppTab
     @Environment(\.modelContext) private var modelContext
+    @EnvironmentObject private var notificationManager: NotificationManager
     @AppStorage(AppStorageKey.globalRemindersEnabled) private var globalRemindersEnabled = true
     @Query(sort: [SortDescriptor(\Subscription.updatedAt, order: .reverse)]) private var subscriptions: [Subscription]
 
@@ -60,9 +61,10 @@ struct SubscriptionsListView: View {
         .sheet(isPresented: $showingAddSheet) {
             NavigationStack {
                 SubscriptionFormView()
+                    .environmentObject(notificationManager)
             }
         }
-        .animation(.default, value: filteredSubscriptions)
+
     }
 
     private var listView: some View {
@@ -151,6 +153,11 @@ struct SubscriptionsListView: View {
     }
 
     private func delete(_ subscription: Subscription) {
+        let identifier = subscription.id
+        Task {
+            await notificationManager.cancelReminder(forID: identifier)
+        }
+
         withAnimation {
             modelContext.delete(subscription)
             saveChanges()
@@ -162,6 +169,14 @@ struct SubscriptionsListView: View {
             subscription.isArchived.toggle()
             subscription.updatedAt = Date()
             saveChanges()
+        }
+
+        Task {
+            if subscription.isArchived {
+                await notificationManager.cancelReminder(for: subscription)
+            } else {
+                await notificationManager.scheduleReminder(for: subscription)
+            }
         }
     }
 
@@ -332,6 +347,7 @@ private struct ReminderSettingsBanner: View {
 #Preview {
     NavigationStack {
         SubscriptionsListView(selectedTab: .constant(.subscriptions))
+            .environmentObject(NotificationManager())
     }
     .modelContainer(PreviewData.container)
 }
