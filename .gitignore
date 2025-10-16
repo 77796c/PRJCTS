@@ -1,0 +1,37 @@
+# Xcode
+DerivedData/
+*.xcworkspace
+xcuserdata/
+*.xccheckout
+*.moved-aside
+*.xcuserstate
+
+# Swift Package Manager
+.build/
+Packages/
+Package.resolved
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# iOS
+*.ipa
+
+# Swift Playgrounds
+timeline.xctimeline
+playground.xcworkspace
+
+# Logs
+*.log
+
+# Temporary files
+*.swp
+*.swo
+~$*
+
+# IDEs and others
+.idea/
+.vscode/
+*.code-workspace
