@@ -22,6 +22,7 @@ let package = Package(
             ],
             sources: [
                 "Models",
+                "Views",
                 "SubscriptionTrackerApp.swift",
                 "ContentView.swift"
             ]

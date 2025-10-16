@@ -2,46 +2,25 @@ import SwiftUI
 import SwiftData
 
 struct ContentView: View {
-    @Environment(\.modelContext) private var modelContext
-    @Query private var subscriptions: [Subscription]
+    @State private var selectedTab: AppTab = .subscriptions
 
     var body: some View {
-        NavigationSplitView {
-            List {
-                ForEach(subscriptions) { subscription in
-                    VStack(alignment: .leading) {
-                        Text(subscription.name)
-                            .font(.headline)
-                        Text("\(subscription.currency) \(subscription.price as NSDecimalNumber)")
-                            .font(.subheadline)
-                        Text(subscription.billingPeriod.displayName)
-                            .font(.caption)
-                            .foregroundColor(.secondary)
-                    }
-                }
+        TabView(selection: $selectedTab) {
+            NavigationStack {
+                SubscriptionsListView(selectedTab: $selectedTab)
             }
-            .navigationTitle("Subscriptions")
-            .toolbar {
-                ToolbarItem {
-                    Button(action: addSampleSubscription) {
-                        Label("Add Sample", systemImage: "plus")
-                    }
-                }
+            .tabItem {
+                Label("Subscriptions", systemImage: "list.bullet.rectangle")
             }
-        } detail: {
-            Text("Select a subscription")
-        }
-    }
+            .tag(AppTab.subscriptions)
 
-    private func addSampleSubscription() {
-        withAnimation {
-            let newSubscription = Subscription(
-                name: "Sample Service",
-                price: 9.99,
-                billingPeriod: .monthly,
-                nextChargeDate: Date()
-            )
-            modelContext.insert(newSubscription)
+            NavigationStack {
+                ReminderSettingsView()
+            }
+            .tabItem {
+                Label("Settings", systemImage: "gearshape")
+            }
+            .tag(AppTab.settings)
         }
     }
 }
