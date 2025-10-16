@@ -1,0 +1,22 @@
+{
+  "identifier" : "SubuddyLocal",
+  "description" : "StoreKit configuration for Subuddy local testing",
+  "version" : 1,
+  "products" : [
+    {
+      "id" : "com.subuddy.adfree",
+      "displayName" : "Ad-Free Experience",
+      "referenceName" : "Subuddy Ad-Free Unlock",
+      "description" : "Permanently remove advertising from the Subuddy app.",
+      "type" : "NON_CONSUMABLE",
+      "price" : {
+        "value" : 2.99,
+        "currency" : "USD"
+      },
+      "familyShareable" : true,
+      "localTesting" : {
+        "isEnabled" : true
+      }
+    }
+  ]
+}
