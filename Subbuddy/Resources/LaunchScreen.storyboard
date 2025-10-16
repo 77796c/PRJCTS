@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="32700" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22690"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
+    </dependencies>
+    <scenes>
+        <!--Launch Screen-->
+        <scene sceneID="LAUNCH-SCENE">
+            <objects>
+                <viewController id="LAUNCH-CONTROLLER" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="LAUNCH-VIEW">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="Subuddy" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TITLE-LABEL">
+                                <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="32"/>
+                                <color key="textColor" name="AccentColor" catalog=""/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" name="BackgroundColor" catalog=""/>
+                        <constraints>
+                            <constraint firstItem="TITLE-LABEL" firstAttribute="centerX" secondItem="LAUNCH-VIEW" secondAttribute="centerX" id="CENTER-X"/>
+                            <constraint firstItem="TITLE-LABEL" firstAttribute="centerY" secondItem="LAUNCH-VIEW" secondAttribute="centerY" id="CENTER-Y"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="SAFE-AREA"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="FIRST-RESPONDER" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+        </scene>
+    </scenes>
+    <resources>
+        <namedColor name="AccentColor">
+            <color red="0.5490196078" green="0.368627451" blue="0.3450980392" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="BackgroundColor">
+            <color red="0.9529411765" green="0.968627451" blue="0.9411764706" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+    </resources>
+</document>
