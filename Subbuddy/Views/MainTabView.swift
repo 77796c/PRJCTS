@@ -1,4 +1,5 @@
 import SwiftUI
+import SwiftData
 
 struct MainTabView: View {
     @State private var selectedTab: Tab = .dashboard
@@ -27,6 +28,9 @@ struct MainTabView: View {
                 .navigationTitle(tab.title)
                 .toolbarBackground(.visible, for: .navigationBar)
                 .toolbarBackground(Color.appBackground, for: .navigationBar)
+                .navigationDestination(for: Subscription.self) { subscription in
+                    SubscriptionDetailView(subscription: subscription)
+                }
         }
         .tabItem {
             Label(tab.title, systemImage: tab.systemImage)
@@ -67,4 +71,5 @@ extension MainTabView {
 
 #Preview {
     MainTabView()
+        .modelContainer(PreviewData.container)
 }

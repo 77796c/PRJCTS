@@ -1,4 +1,5 @@
 import SwiftUI
+import SwiftData
 
 #if canImport(UIKit)
 import UIKit
@@ -6,7 +7,15 @@ import UIKit
 
 @main
 struct SubbuddyApp: App {
+    private let modelContainer: ModelContainer
+
     init() {
+        do {
+            modelContainer = try ModelContainer(for: Subscription.self)
+        } catch {
+            fatalError("Failed to create model container: \(error)")
+        }
+
         configureAppearance()
     }
 
@@ -16,6 +25,7 @@ struct SubbuddyApp: App {
                 .accentColor(.appAccent)
                 .background(Color.appBackground.ignoresSafeArea())
         }
+        .modelContainer(modelContainer)
     }
 
     private func configureAppearance() {
