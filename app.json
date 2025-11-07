@@ -1,0 +1,19 @@
+{
+  "name": "Note Keeper",
+  "description": "A powerful note-taking app for ChatGPT. Create, manage, search, and organize your notes with tags.",
+  "version": "1.0.0",
+  "icon": "📝",
+  "author": "Claude",
+  "mcp": {
+    "command": "node",
+    "args": ["dist/server.js"],
+    "env": {}
+  },
+  "capabilities": {
+    "tools": true,
+    "ui": true
+  },
+  "ui": {
+    "component": "web/dist/component.js"
+  }
+}
